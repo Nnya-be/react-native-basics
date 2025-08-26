@@ -7,6 +7,7 @@ import { images } from '@/constants/images'
 import MovieCard from '@/components/MovieCard'
 import { icons } from '@/constants/icons'
 import SearchBar from '@/components/SearchBar'
+import { updateSearchCount } from '@/services/appwrite'
 
 const search = () => {
 
@@ -16,9 +17,14 @@ const search = () => {
   }),false)
 
   useEffect( () =>{
+  
+
     const timeoutId = setTimeout( async () => {
       if(searchTerm.trim()){
         await refetchMovies();
+        if(movies?.length > 0 && movies?.[0]){
+          await updateSearchCount(searchTerm, movies[0]);
+        }
       }else {
         reset();
       }
